@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/parentLayout"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.angeld.personal.app.jumpjump.MainActivity">
+
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_0_0"
+        android:tag="0_0"
+        android:background="@android:color/black"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+    <!-- 2rd -->
+    <Space
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/space_1_0"
+        android:layout_below="@+id/piece_0_0"
+        android:layout_alignLeft="@id/piece_0_0"/>
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_1_0"
+        android:tag="1_0"
+        android:background="@android:color/black"
+        android:layout_below="@+id/piece_0_0"
+        android:layout_toLeftOf="@id/space_1_0" />
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_1_1"
+        android:tag="1_1"
+        android:background="@android:color/black"
+        android:layout_below="@+id/piece_0_0"
+        android:layout_toRightOf="@id/space_1_0"
+        />
+    <!-- 3rd -->
+    <Space
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/space_2_0"
+        android:layout_below="@+id/piece_1_0"
+        android:layout_alignLeft="@id/piece_1_0"/>
+    <Space
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/space_2_1"
+        android:layout_below="@+id/piece_1_1"
+        android:layout_alignLeft="@id/piece_1_1"/>
+
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_2_0"
+        android:tag="2_0"
+        android:background="@android:color/black"
+        android:layout_below="@+id/piece_1_0"
+        android:layout_toLeftOf="@id/space_2_0" />
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_2_1"
+        android:tag="2_1"
+        android:background="@android:color/black"
+        android:layout_below="@+id/piece_1_0"
+        android:layout_toLeftOf="@id/space_2_1"
+        />
+    <ImageButton
+        android:layout_width="@dimen/piece_edge"
+        android:layout_height="@dimen/piece_edge"
+        android:id="@+id/piece_2_2"
+        android:tag="2_2"
+        android:background="@android:color/black"
+        android:layout_below="@+id/piece_1_0"
+        android:layout_toRightOf="@id/space_2_1"
+        />
+</RelativeLayout>
