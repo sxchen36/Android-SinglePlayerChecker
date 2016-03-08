@@ -37,8 +37,6 @@ public class GameModel {
         }
         // Foo
         removePiece(2, 0);
-        removePiece(2,1);
-        removePiece(2,2);
         return mBoard;
     }
 
@@ -71,6 +69,17 @@ public class GameModel {
 
     public void movePiece(Piece dropPiece) {
         removePiece(mSelectedPiece.x, mSelectedPiece.y);
+        if (mSelectedPiece.x == dropPiece.x) {
+            int diff = (mSelectedPiece.y > dropPiece.y) ? -1 : 1;
+            removePiece(mSelectedPiece.x, mSelectedPiece.y + diff);
+        } else if (mSelectedPiece.y == dropPiece.y) {
+            int diff = (mSelectedPiece.x > dropPiece.x) ? -1 : 1;
+            removePiece(mSelectedPiece.x + diff, mSelectedPiece.y);
+        } else {
+            int diffx = (mSelectedPiece.x > dropPiece.x) ? -1 : 1;
+            int diffy = (mSelectedPiece.y > dropPiece.y) ? -1 : 1;
+            removePiece(mSelectedPiece.x + diffx, mSelectedPiece.y + diffy);
+        }
         selectPiece(dropPiece);
     }
 

@@ -17,7 +17,6 @@ import com.angeld.personal.app.jumpjump.model.Piece;
 
 public class MainActivity extends AppCompatActivity implements ModelChangeListener{
     RelativeLayout mParentLayout;
-    ImageButton b00, b10, b11, b20, b21, b22;
     GameModel mModel;
     private View mSelectedImage;
 
@@ -31,24 +30,13 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
         mModel.setListener(this);
         mModel.initBoard();
         mParentLayout.setOnDragListener(new MyDragListener());
-        b00 = (ImageButton)findViewById(R.id.piece_0_0);
-        b00.setOnTouchListener(new MyTouchListener());
-        b00.setOnDragListener(new MyDragListener());
-        b10 = (ImageButton)findViewById(R.id.piece_1_0);
-        b10.setOnTouchListener(new MyTouchListener());
-        b10.setOnDragListener(new MyDragListener());
-        b11 = (ImageButton)findViewById(R.id.piece_1_1);
-        b11.setOnTouchListener(new MyTouchListener());
-        b11.setOnDragListener(new MyDragListener());
-        b20 = (ImageButton)findViewById(R.id.piece_2_0);
-        b20.setOnTouchListener(new MyTouchListener());
-        b20.setOnDragListener(new MyDragListener());
-        b21 = (ImageButton)findViewById(R.id.piece_2_1);
-        b21.setOnTouchListener(new MyTouchListener());
-        b21.setOnDragListener(new MyDragListener());
-        b22 = (ImageButton)findViewById(R.id.piece_2_2);
-        b22.setOnTouchListener(new MyTouchListener());
-        b22.setOnDragListener(new MyDragListener());
+        for(int i=0; i<mParentLayout.getChildCount(); ++i) {
+            View child = mParentLayout.getChildAt(i);
+            if (child instanceof ImageButton) {
+                child.setOnTouchListener(new MyTouchListener());
+                child.setOnDragListener(new MyDragListener());
+            }
+        }
     }
 
     private Piece getPieceFromTag(String tag) {
