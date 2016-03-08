@@ -52,11 +52,10 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
     private final class MyTouchListener implements View.OnTouchListener {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-
                 String viewTag = view.getTag().toString();
                 mSelectedImage = view;
-                mModel.selectPiece(getPieceFromTag(viewTag));
-
+                boolean pick = mModel.pickPiece(getPieceFromTag(viewTag));
+                if (!pick) return false;
                 ClipData data = ClipData.newPlainText(viewTag, viewTag); //TODO: why not "",""??
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
@@ -68,38 +67,35 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
         }
     }
 
-
     class MyDragListener implements View.OnDragListener {
 
         @Override
         public boolean onDrag(View v, DragEvent event) {
             switch (event.getAction()) {
                 case DragEvent.ACTION_DRAG_STARTED:
-                    Log.v("Test", "Entered start");
+//                    Log.v("Test", "Entered start");
                     break;
                 case DragEvent.ACTION_DRAG_ENTERED:
-                    Log.v("Test", "Entered drag");
+//                    Log.v("Test", "Entered drag");
                     break;
                 case DragEvent.ACTION_DRAG_EXITED:
                     break;
                 case DragEvent.ACTION_DROP:
-                    Log.v("Test", "Entered drop");
-                    if (v.getTag() == null) {
-                        // drop on layout
-                        mSelectedImage.setBackgroundColor(Color.BLACK);
-                    } else {
-                        // drop on a piece
+//                    Log.v("Test", "Entered drop");
+                    if (v.getTag() != null) {
                         String viewTag = v.getTag().toString();
                         Piece dropPiece = getPieceFromTag(viewTag);
                         if (mModel.isValidMove(dropPiece)) {
                             mModel.movePiece(dropPiece);
-                        } else {
-                            mSelectedImage.setBackgroundColor(Color.BLACK);
                         }
+                    } else {
+                        String viewTag = mSelectedImage.getTag().toString();
+                        Piece dropPiece = getPieceFromTag(viewTag);
+                        mModel.dropPiece(dropPiece);
                     }
                     break;
                 case DragEvent.ACTION_DRAG_ENDED:
-                    Log.v("Test", "Ended drop");
+//                    Log.v("Test", "Ended drop");
                 default:
                     break;
             }
@@ -113,15 +109,23 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
     }
 
     @Override
-    public void onPieceSelect(Piece p) {
+    public void onPiecePick(Piece p) {
+        String tag = getTagFromPiece(p);
+        View v = mParentLayout.findViewWithTag(tag);
+        v.setBackgroundColor(Color.WHITE);
+    }
+
+    @Override
+    public void onPieceDrop(Piece p) {
         String tag = getTagFromPiece(p);
         View v = mParentLayout.findViewWithTag(tag);
         v.setBackgroundColor(Color.BLACK);
     }
 
-    @Override
-    public void onPieceDrop(Piece p) {
 
+    @Override
+    public void onGameOver(int leftPiece) {
+//        Log.v("lalalal", "Game over " + leftPiece);
     }
 
     @Override

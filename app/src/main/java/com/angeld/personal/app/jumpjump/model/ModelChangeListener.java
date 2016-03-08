@@ -5,7 +5,8 @@ package com.angeld.personal.app.jumpjump.model;
  */
 public interface ModelChangeListener {
     void onBoardInit();
-    void onPieceSelect(Piece p);
+    void onPiecePick(Piece p);
     void onPieceDrop(Piece p);
     void onPieceRemoved(Piece p);
+    void onGameOver(int leftPiece);
 }
