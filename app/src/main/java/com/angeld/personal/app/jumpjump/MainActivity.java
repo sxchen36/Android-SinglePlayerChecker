@@ -1,16 +1,23 @@
 package com.angeld.personal.app.jumpjump;
 
 import android.content.ClipData;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.angeld.personal.app.jumpjump.Utils.Util;
 import com.angeld.personal.app.jumpjump.model.GameModel;
 import com.angeld.personal.app.jumpjump.model.ModelChangeListener;
 import com.angeld.personal.app.jumpjump.model.Piece;
@@ -20,15 +27,11 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
     GameModel mModel;
     private View mSelectedImage;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mParentLayout = (RelativeLayout)findViewById(R.id.parentLayout);
-        mModel = GameModel.getModel();
-        mModel.setListener(this);
-        mModel.initBoard();
         mParentLayout.setOnDragListener(new MyDragListener());
         for(int i=0; i<mParentLayout.getChildCount(); ++i) {
             View child = mParentLayout.getChildAt(i);
@@ -37,6 +40,10 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
                 child.setOnDragListener(new MyDragListener());
             }
         }
+
+        mModel = GameModel.getModel();
+        mModel.setListener(this);
+        mModel.initBoard();
     }
 
     private Piece getPieceFromTag(String tag) {
@@ -56,10 +63,9 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
                 mSelectedImage = view;
                 boolean pick = mModel.pickPiece(getPieceFromTag(viewTag));
                 if (!pick) return false;
-                ClipData data = ClipData.newPlainText(viewTag, viewTag); //TODO: why not "",""??
+                ClipData data = ClipData.newPlainText(viewTag, viewTag);
                 View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(view);
                 view.startDrag(data, shadowBuilder, view, 0);
-                view.setBackgroundColor(Color.WHITE);
                 return true;
             } else {
                 return false;
@@ -84,18 +90,27 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
 //                    Log.v("Test", "Entered drop");
                     if (v.getTag() != null) {
                         String viewTag = v.getTag().toString();
-                        Piece dropPiece = getPieceFromTag(viewTag);
-                        if (mModel.isValidMove(dropPiece)) {
-                            mModel.movePiece(dropPiece);
+                        Piece nextCell = getPieceFromTag(viewTag);
+                        if (mModel.isValidMove(nextCell)) {
+                            mModel.movePiece(nextCell);
+                        } else {
+                            String originalView = mSelectedImage.getTag().toString();
+                            Piece originalCell = getPieceFromTag(originalView);
+                            mModel.dropPiece(originalCell);
                         }
                     } else {
+                        String viewTag = mSelectedImage.getTag().toString();
+                        Piece originalCell = getPieceFromTag(viewTag);
+                        mModel.dropPiece(originalCell);
+                    }
+                    break;
+                case DragEvent.ACTION_DRAG_ENDED:
+                    if (!event.getResult()) {
                         String viewTag = mSelectedImage.getTag().toString();
                         Piece dropPiece = getPieceFromTag(viewTag);
                         mModel.dropPiece(dropPiece);
                     }
                     break;
-                case DragEvent.ACTION_DRAG_ENDED:
-//                    Log.v("Test", "Ended drop");
                 default:
                     break;
             }
@@ -112,16 +127,15 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
     public void onPiecePick(Piece p) {
         String tag = getTagFromPiece(p);
         View v = mParentLayout.findViewWithTag(tag);
-        v.setBackgroundColor(Color.WHITE);
+        v.setBackgroundResource(R.drawable.empty_spot);
     }
 
     @Override
     public void onPieceDrop(Piece p) {
         String tag = getTagFromPiece(p);
         View v = mParentLayout.findViewWithTag(tag);
-        v.setBackgroundColor(Color.BLACK);
+        v.setBackgroundResource(R.drawable.piece);
     }
-
 
     @Override
     public void onGameOver(int leftPiece) {
@@ -132,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements ModelChangeListen
     public void onPieceRemoved(Piece p) {
           String tag = getTagFromPiece(p);
         View v = mParentLayout.findViewWithTag(tag);
-        v.setBackgroundColor(Color.WHITE);
+        v.setBackgroundResource(R.drawable.empty_spot);
     }
+
+
 }

@@ -1,5 +1,7 @@
 package com.angeld.personal.app.jumpjump.model;
 
+import java.util.Random;
+
 /**
  * Created by Angel_D on 2/26/16.
  */
@@ -14,7 +16,6 @@ public class GameModel {
 
 
     private GameModel() {
-        //initBoard();
     }
 
     public static GameModel getModel() {
@@ -37,8 +38,10 @@ public class GameModel {
                 remainNum++;
             }
         }
-        // Foo
-        removePiece(2, 0);
+        Random random = new Random();
+        int row = random.nextInt(DIMEN);
+        int col = random.nextInt(row);
+        removePiece(row, col);
         remainNum--;
         return mBoard;
     }
